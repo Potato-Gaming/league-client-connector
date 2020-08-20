@@ -1,0 +1,14 @@
+[package]
+name = "league-client-connector"
+version = "0.1.0"
+authors = ["Victor Quiroz <victorhqc@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+base64 = "0.12"
+futures = "0.1"
+parallel-event-emitter = "0.2"
+regex = "1"
+tokio = "0.2"
