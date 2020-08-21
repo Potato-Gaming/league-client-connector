@@ -8,6 +8,5 @@ phases of development** and has several limitations & unimplemented features. Do
 ## Roadmap
 
 - [x] Read lockfile
-- [ ] Error handling
+- [x] Error handling
 - [ ] Documentation
-- [ ] Mechanism to wait for league client to open ?
