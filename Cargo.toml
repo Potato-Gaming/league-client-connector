@@ -8,7 +8,4 @@ edition = "2018"
 
 [dependencies]
 base64 = "0.12"
-futures = "0.1"
-parallel-event-emitter = "0.2"
 regex = "1"
-tokio = "0.2"
