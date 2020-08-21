@@ -9,6 +9,9 @@ use std::result::Result;
 pub struct LeagueClientConnector {}
 
 impl LeagueClientConnector {
+    /// Parses League's client file which contains information needed to connect to
+    /// [Game Client API](https://developer.riotgames.com/docs/lol#game-client-api)
+    /// Which uses RESTful to interact with League's Client
     pub fn parse_lockfile() -> Result<RiotLockFile, ()> {
         let mut path = PathBuf::from(Self::get_path().unwrap());
         path.push("lockfile");
@@ -39,6 +42,7 @@ impl LeagueClientConnector {
         })
     }
 
+    /// Gets League of Legends Installation path. Useful to find the "lockfile" for example.
     pub fn get_path() -> Result<String, ()> {
         let raw_info: String = match OS {
             "windows" => Self::get_raw_league_info_in_windows().unwrap(),
