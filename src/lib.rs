@@ -12,6 +12,18 @@ impl LeagueClientConnector {
     /// Parses League's client file which contains information needed to connect to
     /// [Game Client API](https://developer.riotgames.com/docs/lol#game-client-api)
     /// Which uses RESTful to interact with League's Client
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use league_client_connector::LeagueClientConnector;
+    ///
+    /// let lockfile = LeagueClientConnector::parse_lockfile().unwrap();
+    ///
+    /// println!("{:?}", lockfile);
+    ///
+    ///  assert!(lockfile.port > 0);
+    /// ```
     pub fn parse_lockfile() -> Result<RiotLockFile> {
         let mut path = PathBuf::from(Self::get_path()?);
         path.push("lockfile");
@@ -48,6 +60,18 @@ impl LeagueClientConnector {
     }
 
     /// Gets League of Legends Installation path. Useful to find the "lockfile" for example.
+    /// Works for Windows & Mac OSX
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use league_client_connector::LeagueClientConnector;
+    ///
+    /// let path = LeagueClientConnector::get_path().unwrap();
+    ///
+    ///
+    /// assert(path.len() > 0);
+    /// ```
     pub fn get_path() -> Result<String> {
         let raw_info: String = match OS {
             "windows" => Self::get_raw_league_info_in_windows()?,
