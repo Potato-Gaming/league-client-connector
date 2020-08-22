@@ -6,7 +6,7 @@ edition = "2018"
 description = "Rust implementation of lcu-connector. Retrieves lockfile information to access League of Legends API Client"
 license = "MIT"
 repository = "https://github.com/Potato-Gaming/league-client-connector"
-keywords = ["league of legends", "league", "lol", "lcu-connector"]
+keywords = ["league", "legends", "league-of-legends", "lol", "lcu-connector"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
