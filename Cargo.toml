@@ -3,6 +3,7 @@ name = "league-client-connector"
 version = "0.1.0"
 authors = ["Victor Quiroz <victorhqc@gmail.com>"]
 edition = "2018"
+readme = "README.md"
 description = "Rust implementation of lcu-connector. Retrieves lockfile information to access League of Legends API Client"
 license = "MIT"
 repository = "https://github.com/Potato-Gaming/league-client-connector"
