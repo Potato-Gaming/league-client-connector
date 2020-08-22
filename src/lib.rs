@@ -1,11 +1,26 @@
+//! # league_client_connector
+//!
+//! Rust implementation for [lcu-connector](https://github.com/Pupix/lcu-connector) minus the
+//! file watching mechanism. This crate needs the League Client to be opened, in order to get the
+//! installation path for League of Legends so the `lockfile` can be retrieved correctly.
+//!
+//! Note that every time the League Client is opened, it creates a new `lockfile` so a watcher or
+//! some refresh mechanism needs to be implemented to use correctly in an application.
+//!
+//! The contents of the `lockfile` are parsed and presented in a readable format so a connection to
+//! the [Game Client API](https://developer.riotgames.com/docs/lol#game-client-api) can be
+//! established.
+
 use base64::encode;
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 use snafu::{ResultExt, Snafu};
 use std::env::consts::OS;
 use std::fs;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
+/// Make sure the League of Legends Client is opened before running any of the methods.
 pub struct LeagueClientConnector {}
 
 impl LeagueClientConnector {
@@ -22,7 +37,7 @@ impl LeagueClientConnector {
     ///
     /// println!("{:?}", lockfile);
     ///
-    ///  assert!(lockfile.port > 0);
+    /// assert!(lockfile.port > 0);
     /// ```
     pub fn parse_lockfile() -> Result<RiotLockFile> {
         let mut path = PathBuf::from(Self::get_path()?);
@@ -69,8 +84,7 @@ impl LeagueClientConnector {
     ///
     /// let path = LeagueClientConnector::get_path().unwrap();
     ///
-    ///
-    /// assert(path.len() > 0);
+    /// assert!(path.len() > 0);
     /// ```
     pub fn get_path() -> Result<String> {
         let raw_info: String = match OS {
@@ -137,7 +151,22 @@ impl LeagueClientConnector {
     }
 }
 
-#[derive(Debug)]
+/// This struct can be used to establish a connection with
+/// [Game Client API](https://developer.riotgames.com/docs/lol#game-client-api) like so
+///
+/// ```bash
+/// curl --request GET \
+/// --url https://127.0.0.1:54835/lol-summoner/v1/current-summoner \
+/// --header 'authorization: Basic cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR'
+/// ```
+///
+/// Note that all the information is gotten from the lockfile:
+/// - protocol: https
+/// - address: 127.0.0.1
+/// - b64_auth: cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR
+///
+/// For the actual endpoint, download the [Rift Explorer](https://github.com/Pupix/rift-explorer)
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RiotLockFile {
     pub process: String,
     pub pid: u32,
