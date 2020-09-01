@@ -166,7 +166,7 @@ impl LeagueClientConnector {
 /// - b64_auth: cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR
 ///
 /// For the actual endpoint, download the [Rift Explorer](https://github.com/Pupix/rift-explorer)
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct RiotLockFile {
     pub process: String,
     pub pid: u32,
@@ -176,12 +176,6 @@ pub struct RiotLockFile {
     pub username: String,
     pub address: String,
     pub b64_auth: String,
-}
-
-impl PartialEq<RiotLockFile> for RiotLockFile {
-    fn eq(&self, other: &RiotLockFile) -> bool {
-        self.address == other.address && self.b64_auth == other.b64_auth && self.port == other.port
-    }
 }
 
 pub type Result<T, E = LeagueConnectorError> = std::result::Result<T, E>;
