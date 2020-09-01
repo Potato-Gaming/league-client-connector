@@ -166,7 +166,7 @@ impl LeagueClientConnector {
 /// - b64_auth: cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR
 ///
 /// For the actual endpoint, download the [Rift Explorer](https://github.com/Pupix/rift-explorer)
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RiotLockFile {
     pub process: String,
     pub pid: u32,
@@ -176,6 +176,12 @@ pub struct RiotLockFile {
     pub username: String,
     pub address: String,
     pub b64_auth: String,
+}
+
+impl PartialEq<RiotLockFile> for RiotLockFile {
+    fn eq(&self, other: &RiotLockFile) -> bool {
+        self.address == other.address && self.b64_auth == other.b64_auth && self.port == other.port
+    }
 }
 
 pub type Result<T, E = LeagueConnectorError> = std::result::Result<T, E>;
@@ -208,4 +214,54 @@ pub enum LeagueConnectorError {
         source: std::num::ParseIntError,
         name: &'static str,
     },
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn lockfile_is_equal() {
+        let file1 = build_lockfile(1337, "127.0.0.1", "some_b64");
+        let file2 = build_lockfile(1337, "127.0.0.1", "some_b64");
+
+        assert_eq!(file1, file2);
+    }
+
+    #[test]
+    fn lockfile_diff_port() {
+        let file1 = build_lockfile(1337, "127.0.0.1", "some_b64");
+        let file2 = build_lockfile(1338, "127.0.0.1", "some_b64");
+
+        assert_ne!(file1, file2);
+    }
+
+    #[test]
+    fn lockfile_diff_address() {
+        let file1 = build_lockfile(1337, "127.0.0.1", "some_b64");
+        let file2 = build_lockfile(1337, "127.0.0.2", "some_b64");
+
+        assert_ne!(file1, file2);
+    }
+
+    #[test]
+    fn lockfile_diff_auth() {
+        let file1 = build_lockfile(1337, "127.0.0.1", "some_b64");
+        let file2 = build_lockfile(1337, "127.0.0.1", "another_b64");
+
+        assert_ne!(file1, file2);
+    }
+
+    fn build_lockfile(port: u32, address: &str, b64_auth: &str) -> RiotLockFile {
+        RiotLockFile {
+            process: "1234".to_string(),
+            pid: 1234,
+            port,
+            password: "some_password".to_string(),
+            protocol: "https".to_string(),
+            username: "some_username".to_string(),
+            address: address.to_string(),
+            b64_auth: b64_auth.to_string(),
+        }
+    }
 }
