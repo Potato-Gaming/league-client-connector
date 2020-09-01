@@ -27,3 +27,11 @@ fn parse_lockfile() {
 
   assert!(lockfile.port > 0);
 }
+
+#[test]
+fn equality() {
+  let lockfile1 = LeagueClientConnector::parse_lockfile().unwrap();
+  let lockfile2 = LeagueClientConnector::parse_lockfile().unwrap();
+
+  assert!(lockfile1 == lockfile2, true);
+}

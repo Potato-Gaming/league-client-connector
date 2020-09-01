@@ -166,7 +166,7 @@ impl LeagueClientConnector {
 /// - b64_auth: cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR
 ///
 /// For the actual endpoint, download the [Rift Explorer](https://github.com/Pupix/rift-explorer)
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct RiotLockFile {
     pub process: String,
     pub pid: u32,
