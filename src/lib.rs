@@ -42,12 +42,8 @@ impl LeagueClientConnector {
     pub fn parse_lockfile() -> Result<RiotLockFile> {
         let mut path = PathBuf::from(Self::get_path()?);
         path.push("lockfile");
-        let lockfile = match path.to_str() {
-            Some(l) => l,
-            None => {
-                return Err(LeagueConnectorError::EmptyPath {});
-            }
-        };
+
+        let lockfile = path.to_str().ok_or(LeagueConnectorError::EmptyPath {})?;
 
         let contents = fs::read_to_string(lockfile).context(UnableToRead)?;
 
@@ -95,12 +91,11 @@ impl LeagueClientConnector {
 
         let pattern = Regex::new(r"--install-directory=(?P<dir>[[:alnum:][:space:]:\./\\]+)")
             .context(RegexParse)?;
-        let caps = match pattern.captures(&raw_info) {
-            Some(c) => c,
-            None => {
-                return Err(LeagueConnectorError::NoInstallationPath {});
-            }
-        };
+
+        let caps = pattern
+            .captures(&raw_info)
+            .ok_or(LeagueConnectorError::NoInstallationPath {})?;
+
         let path = caps["dir"].to_string().trim().to_string();
 
         Ok(path)
