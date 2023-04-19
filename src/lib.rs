@@ -13,12 +13,14 @@
 
 use base64::encode;
 use regex::Regex;
-use serde::{Deserialize, Serialize};
 use snafu::{ResultExt, Snafu};
 use std::env::consts::OS;
 use std::fs;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
+
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 
 /// Make sure the League of Legends Client is opened before running any of the methods.
 pub struct LeagueClientConnector {}
@@ -166,7 +168,8 @@ impl LeagueClientConnector {
 /// - b64_auth: cmlvdDpDMERXVDZWREoySDUwSEZKMkJFU2hR
 ///
 /// For the actual endpoint, download the [Rift Explorer](https://github.com/Pupix/rift-explorer)
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct RiotLockFile {
     pub process: String,
     pub pid: u32,
